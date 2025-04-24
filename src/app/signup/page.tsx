@@ -114,12 +114,13 @@ export default function Signup() {
   }  
 
   return (
-    <div className="min-h-screen flex items-center justify-center relative font-sans overflow-hidden bg-white">
+    <div className="min-h-screen flex items-center justify-center px-4 sm:px-6 md:px-8 bg-white font-sans">
   <div
     className="w-full max-w-md bg-white rounded-xl shadow-sm border border-[#3F54D1] 
-    p-6 sm:p-8 md:p-10 lg:p-12 text-center"
+    p-8 text-center"
     style={{ boxShadow: '0 4px 20px rgba(0, 0, 0, 0.05)' }}
   >
+
 
         <div className="mb-6 flex flex-col items-center">
         <div className="absolute top-0 left-1/2 transform -translate-x-1/2 

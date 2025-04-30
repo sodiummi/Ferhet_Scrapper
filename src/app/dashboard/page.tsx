@@ -3,12 +3,48 @@
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import { useRouter } from 'next/navigation'; // Import useRouter from next/navigation
 import { useState } from 'react';
+import { useEffect } from 'react';
+
 
 export default function Dashboard() {
+  const [companies, setCompanies] = useState<any[]>([]);
+  const [industry, setIndustry] = useState('');
+const [country, setCountry] = useState('');
+const [city, setCity] = useState('');
+const [employeeRange, setEmployeeRange] = useState('');
+
+
+useEffect(() => {
+  // Fetch data on component mount
+}, []);
+
+const handleSearch = () => {
+  fetch('/api/companies')
+    .then((res) => res.json())     // Step 1: Get all company data
+    .then((data) => {
+      const filtered = data.filter((companies: { name?: string; website?: string; industry?: string; address?: { address?: string }; size?: string }) => {    // Step 2: Filter it
+
+        // Individual filter checks
+        const nameMatch = !companyName || companies.name?.toLowerCase().includes(companyName.toLowerCase());
+        const websiteMatch = !website || companies.website?.toLowerCase().includes(website.toLowerCase());
+        const industryMatch = !industry || companies.industry === industry;
+        const countryMatch = !country || companies.address?.address?.toLowerCase().includes(country.toLowerCase());
+        const cityMatch = !city || companies.address?.address?.toLowerCase().includes(city.toLowerCase());
+        const employeeMatch = !employeeRange || companies.size === employeeRange;
+
+        // Only return company if it matches ALL selected filters
+        return nameMatch && websiteMatch && industryMatch && countryMatch && cityMatch && employeeMatch;
+      });
+
+      setCompanies(filtered);   // Step 3: Show the filtered companies in the table
+    });
+};
+
+
   const router = useRouter(); // Use the useRouter hook here
 // Inside your component
 
-const [email, setEmail] = useState('');  // Add this line
+const [emails, setEmail] = useState('');  // Add this line
 const [password, setPassword] = useState('');
 const [confirmPassword, setConfirmPassword] = useState('');
 
@@ -50,16 +86,16 @@ const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const rows = [
-    { name: "Muhammad Nooh", location: "New York, USA", department: "Finance", phone: "+1 747 363 4567", email: "info@thestra..." },
-    { name: "Muhammad Nooh", location: "Paris, France", department: "Software dev", phone: "+1 747 363 4567", email: "info@thestra..." },
-    { name: "Muhammad Nooh", location: "Rome, Italy", department: "Accounts", phone: "+1 747 363 4567", email: "info@thestra..." },
-    { name: "Muhammad Nooh", location: "Paris, France", department: "Accounts", phone: "+1 747 363 4567", email: "info@thestra..." },
-    { name: "Muhammad Nooh", location: "Paris, France", department: "Software dev", phone: "+1 747 363 4567", email: "info@thestra..." },
-    { name: "Muhammad Nooh", location: "Paris, France", department: "Finance", phone: "+1 747 363 4567", email: "info@thestra..." },
-    { name: "Muhammad Nooh", location: "Paris, France", department: "Finance", phone: "+1 747 363 4567", email: "info@thestra..." },
-    { name: "Muhammad Nooh", location: "Paris, France", department: "Finance", phone: "+1 747 363 4567", email: "info@thestra..." },
-    { name: "Muhammad Nooh", location: "Paris, France", department: "Finance", phone: "+1 747 363 4567", email: "info@thestra..." },
-    { name: "Muhammad Nooh", location: "Paris, France", department: "Finance", phone: "+1 747 363 4567", email: "info@thestra..." },
+    { name: "Muhammad Nooh", address: "New York, USA", department: "Finance", phones: "+1 747 363 4567", emails: "info@thestra..." },
+    { name: "Muhammad Nooh", address: "Paris, France", department: "Software dev", phones: "+1 747 363 4567", emails: "info@thestra..." },
+    { name: "Muhammad Nooh", address: "Rome, Italy", department: "Accounts", phones: "+1 747 363 4567", emails: "info@thestra..." },
+    { name: "Muhammad Nooh", address: "Paris, France", department: "Accounts", phones: "+1 747 363 4567", emails: "info@thestra..." },
+    { name: "Muhammad Nooh", address: "Paris, France", department: "Software dev", phones: "+1 747 363 4567", emails: "info@thestra..." },
+    { name: "Muhammad Nooh", address: "Paris, France", department: "Finance", phones: "+1 747 363 4567", emails: "info@thestra..." },
+    { name: "Muhammad Nooh", address: "Paris, France", department: "Finance", phones: "+1 747 363 4567", emails: "info@thestra..." },
+    { name: "Muhammad Nooh", address: "Paris, France", department: "Finance", phones: "+1 747 363 4567", emails: "info@thestra..." },
+    { name: "Muhammad Nooh", address: "Paris, France", department: "Finance", phones: "+1 747 363 4567", emails: "info@thestra..." },
+    { name: "Muhammad Nooh", address: "Paris, France", department: "Finance", phones: "+1 747 363 4567", emails: "info@thestra..." },
   ];
 
   const openModal = () => {
@@ -197,8 +233,16 @@ const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
             </div>
             <div className="relative">
               <label className="block mb-1 text-sm font-medium text-[#000000]">Industry</label>
-              <select className="appearance-none border border-gray-300 rounded-md w-full text-gray-500 text-sm pl-3 pr-2 h-10.5 leading-10 bg-gray">
-                <option>Select Industry</option>
+              <select
+  value={industry}
+  onChange={(e) => setIndustry(e.target.value)}
+  className="appearance-none border border-gray-300 rounded-md w-full text-gray-500 text-sm pl-3 pr-2 h-10.5 leading-10 bg-gray"
+                aria-label="Industry"
+              >
+                <option value="">Select Industry</option>
+<option value="IT">IT</option>
+<option value="Automotive">Automotive</option>
+
               </select>
               {/* Custom SVG arrow aligned with text */}
               <div className="absolute left-70 top-[47] transform -translate-y-1/2 pointer-events-none flex items-center h-10">
@@ -210,7 +254,10 @@ const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 
             <div className="relative">
               <label className="block mb-1 text-sm font-medium text-[#000000]">Country</label>
-              <select className="appearance-none border border-gray-300 rounded-md w-full text-gray-500 text-sm pl-3 pr-2 h-10.5 leading-10 bg-gray">
+              <select
+                className="appearance-none border border-gray-300 rounded-md w-full text-gray-500 text-sm pl-3 pr-2 h-10.5 leading-10 bg-gray"
+                aria-label="Country selection"
+              >
                 <option>Select country</option>
               </select>
               {/* Custom SVG arrow aligned with text */}
@@ -223,7 +270,7 @@ const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 
             <div className="relative">
               <label className="block mb-1 text-sm font-medium text-[#000000]">City/State</label>
-              <select className="appearance-none border border-gray-300 rounded-md w-full text-gray-500 text-sm pl-3 pr-2 h-10.5 leading-10 bg-gray">
+              <select aria-label="City/State selection" className="appearance-none border border-gray-300 rounded-md w-full text-gray-500 text-sm pl-3 pr-2 h-10.5 leading-10 bg-gray">
                 <option>Select city/state</option>
               </select>
               {/* Custom SVG arrow aligned with text */}
@@ -236,7 +283,10 @@ const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
             
             <div className="relative">
               <label className="block mb-1 text-sm font-medium text-[#000000]">Employee Range</label>
-              <select className="appearance-none border border-gray-300 rounded-md w-full text-gray-500 text-sm pl-3 pr-2 h-10.5 leading-10 bg-gray">
+              <select
+                className="appearance-none border border-gray-300 rounded-md w-full text-gray-500 text-sm pl-3 pr-2 h-10.5 leading-10 bg-gray"
+                title="Employee Range"
+              >
                 <option>Select range</option>
               </select>
               {/* Custom SVG arrow aligned with text */}
@@ -261,7 +311,13 @@ const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
             </div>
           </div>
 
-          <button className="bg-[#000000] text-white px-6 py-2 rounded-md mt-4 hover:bg-[#3F54D1]">Search</button>
+          <button
+  onClick={handleSearch}
+  className="bg-[#000000] text-white px-6 py-2 rounded-md mt-4 hover:bg-[#3F54D1]"
+>
+  Search
+</button>
+
         </section>
 
         <section className="bg-[#F2F2F2] p-6 rounded-lg mt-6 mb-[-10]">
@@ -271,31 +327,41 @@ const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
               <thead className="bg-[#E2E2E2] text-[000000]">
                 <tr>
                   <th className="px-4 py-2 font-medium border-l border-gray-300 whitespace-nowrap">Company name</th>
-                  <th className="px-4 py-2 font-medium border-gray-300 whitespace-nowrap">Location</th>
+                  <th className="px-4 py-2 font-medium border-gray-300 whitespace-nowrap">address</th>
                   <th className="px-4 py-2 font-medium border-gray-300 whitespace-nowrap">Industry</th>
                   <th className="px-4 py-2 font-medium border-gray-300 whitespace-nowrap">Phone</th>
-                  <th className="px-4 py-2 font-medium border-gray-300 whitespace-nowrap">Email</th>
+                  <th className="px-4 py-2 font-medium border-gray-300 whitespace-nowrap">emails</th>
                   <th className="px-4 py-2 font-medium border-gray-300 whitespace-nowrap">Website</th>
                   <th className="px-4 py-2 font-medium whitespace-nowrap">Key people</th>
                 </tr>
               </thead>
               <tbody>
-                {[...Array(10)].map((_, idx) => (
-                  <tr key={idx} className="border-t border-b border-gray-300 text-[#565656]">
-                   <td
-                    className="px-4 py-2 border-l border-r border-gray-200 whitespace-nowrap cursor-pointer hover:bg-gray-100 hover:text-black"
-                    onClick={() => setIsDialogOpen(true)}
-                  >
-                    The Stralis Corp
-                  </td>
-                    <td className="px-4 py-2 border-r border-gray-200 whitespace-nowrap">Tukwilla, Washington</td>
-                    <td className="px-4 py-2 border-r border-gray-200 whitespace-nowrap">Technology</td>
-                    <td className="px-4 py-2 border-r border-gray-200 whitespace-nowrap">+1 747 363 4567</td>
-                    <td className="px-4 py-2 border-r border-gray-200 whitespace-nowrap">info@thestralis.com</td>
-                    <td className="px-4 py-2 border-r border-gray-200 whitespace-nowrap">www.thestralis.com</td>
-                    <td className="px-4 py-2 border-r border-gray-200 whitespace-nowrap">M. Nooh</td>
-                  </tr>
-                ))}
+              {companies.map((company, idx) => (
+  <tr key={idx} className="border-t border-b border-gray-300 text-[#565656]">
+  <td className="px-4 py-2 border-l border-r border-gray-200 whitespace-nowrap">
+    {company.name}
+  </td>
+  <td className="px-4 py-2 border-r border-gray-200 whitespace-nowrap">
+    {company.address?.address || "-"}
+  </td>
+  <td className="px-4 py-2 border-r border-gray-200 whitespace-nowrap">
+    {company.industry || "-"}
+  </td>
+  <td className="px-4 py-2 border-r border-gray-200 whitespace-nowrap">
+    {company.phones?.phone || "-"}
+  </td>
+  <td className="px-4 py-2 border-r border-gray-200 whitespace-nowrap">
+    {company.emails?.email || "-"}
+  </td>
+  <td className="px-4 py-2 border-r border-gray-200 whitespace-nowrap">
+    {company.website || "-"}
+  </td>
+  <td className="px-4 py-2 border-r border-gray-200 whitespace-nowrap">
+    {company.management?.CEO || "-"}
+  </td>
+</tr>
+
+))}
               </tbody>
             </table>
           </div>
@@ -364,6 +430,8 @@ const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
             id="profile-image-upload"
             onChange={handleImageChange}
             className="hidden"
+            title="Upload profile image"
+            placeholder="Choose a file"
           />
           <label
             htmlFor="profile-image-upload"
@@ -396,13 +464,13 @@ const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         </div>
       </div>
 
-      {/* Email */}
+      {/* emails */}
       <div className='ml-10 mr-25 mt-8'>
-        <label className="block text-sm font-medium mt-5">Email</label>
+        <label className="block text-sm font-medium mt-5">emails</label>
         <input
-          type="email"
+          type="emails"
           className="w-full border border-gray-300 p-2 rounded-md"
-          value={email}
+          value={emails}
           onChange={(e) => setEmail(e.target.value)}
         />
       </div>
@@ -511,20 +579,20 @@ const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
       <thead className="bg-[#E2E2E2] text-[#000000]">
         <tr>
           <th className="px-4 py-2 font-medium border-l border-gray-300 whitespace-nowrap">Name</th>
-          <th className="px-4 py-2 font-medium border-gray-300 whitespace-nowrap">Location</th>
+          <th className="px-4 py-2 font-medium border-gray-300 whitespace-nowrap">address</th>
           <th className="px-4 py-2 font-medium border-gray-300 whitespace-nowrap">Department</th>
           <th className="px-4 py-2 font-medium border-gray-300 whitespace-nowrap">Phone</th>
-          <th className="px-4 py-2 font-medium border-gray-300 whitespace-nowrap">Email</th>              
+          <th className="px-4 py-2 font-medium border-gray-300 whitespace-nowrap">emails</th>              
         </tr>
       </thead>
       <tbody>
         {rows.map((row, idx) => (
           <tr key={idx} className="border-t border-b border-gray-300 text-[#565656]">
             <td className="px-4 py-2 border-l border-r border-gray-200 whitespace-nowrap">{row.name}</td>
-            <td className="px-4 py-2 border-r border-gray-200 whitespace-nowrap">{row.location}</td>
+            <td className="px-4 py-2 border-r border-gray-200 whitespace-nowrap">{row.address}</td>
             <td className="px-4 py-2 border-r border-gray-200 whitespace-nowrap">{row.department}</td>
-            <td className="px-4 py-2 border-r border-gray-200 whitespace-nowrap">{row.phone}</td>
-            <td className="px-4 py-2 border-r border-gray-200 whitespace-nowrap">{row.email}</td>
+            <td className="px-4 py-2 border-r border-gray-200 whitespace-nowrap">{row.phones}</td>
+            <td className="px-4 py-2 border-r border-gray-200 whitespace-nowrap">{row.emails}</td>
           </tr>
         ))}
       </tbody>

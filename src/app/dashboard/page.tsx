@@ -220,11 +220,11 @@ const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
           <h2 className="text-[#3F54D1] text-2xl font-semibold mb-6">Search</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
             <div>
-              <label className="block mb-1 text-sm font-medium text-[000000]">Company Name</label>
+              <label className="block mb-1 text-sm font-medium text-[#000000]">Company Name</label>
               <input
                 type="text"
                 placeholder={isCompanyFocused || companyName ? '' : 'Company name'}
-                className="border border-gray-300 p-2 rounded-md w-full placeholder:text-sm placeholder-gray-400"
+                className="border border-gray-300 p-2 rounded-md w-full placeholder:text-sm placeholder-gray-400 text-[#000000]"
                 value={companyName}
                 onFocus={() => setIsCompanyFocused(true)}
                 onBlur={() => setIsCompanyFocused(false)}

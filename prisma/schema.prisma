@@ -1,0 +1,29 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model companies {
+  id             Int       @id @default(autoincrement())
+  name           String?   @db.VarChar
+  legal_form     String?   @db.VarChar
+  industry       String?   @db.VarChar
+  address        Json?     @db.Json
+  phones         Json?     @db.Json
+  emails         Json?     @db.Json
+  website        String?   @db.VarChar
+  founding_year  Int?
+  size           String?   @db.VarChar
+  management     Json?     @db.Json
+  patents        Json?     @db.Json
+  certifications Json?     @db.Json
+  source_url     String?   @db.VarChar
+  created_at     DateTime? @db.Timestamp(6)
+  updated_at     DateTime? @db.Timestamp(6)
+
+  @@index([name], map: "ix_companies_name")
+}

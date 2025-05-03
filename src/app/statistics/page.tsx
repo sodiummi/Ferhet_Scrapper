@@ -7,6 +7,10 @@ import { useState } from 'react';
 export default function Statistics() {
   const router = useRouter();
 
+    // State for handling pagination
+    const [currentPage, setCurrentPage] = useState(1);
+    const totalPages = 10; // Adjust this based on your actual data
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -32,6 +36,13 @@ export default function Statistics() {
     console.log("Profile updated:", { firstName, lastName });
     closeModal();
   };
+
+    // Handle page change
+    const handlePageChange = (pageNumber: number) => {
+      setCurrentPage(pageNumber);
+      // Navigate to the new page based on pageNumber
+      router.push(`/statistics?page=${pageNumber}`);
+    };
 
   return (
     <div className="flex min-h-screen rounded-lg bg-white border border-[#3F54D1]">
@@ -149,6 +160,30 @@ export default function Statistics() {
               </tbody>
             </table>
           </div>
+
+           {/* Pagination Controls */}
+           <div className="relative space-x-4 mt-11 mb-[-8]">
+            <div className="absolute right-0 bottom-0 flex items-center space-x-2">
+              <button
+                className="w-8 h-8 bg-[#D9D9D9] border border-gray-300 rounded-md hover:bg-gray-200 flex items-center justify-center"
+                onClick={() => handlePageChange(currentPage > 1 ? currentPage - 1 : 1)}
+              >
+                <svg className="w-full h-full" fill="#8B8B8B" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M15 18l-6-6 6-6v12z" />
+                </svg>
+              </button>
+              <span className="text-sm text-[#8B8B8B]">{`1 2 3 4 5 ......... 10`}</span>
+              <button
+                className="w-8 h-8 bg-[#D9D9D9] border border-gray-300 rounded-md hover:bg-gray-200 flex items-center justify-center"
+                onClick={() => handlePageChange(currentPage < totalPages ? currentPage + 1 : totalPages)}
+              >
+                <svg className="w-full h-full" fill="#8B8B8B" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M10 6l6 6-6 6" />
+                </svg>
+              </button>
+            </div>
+          </div>
+          
         </section>
       </main>
 

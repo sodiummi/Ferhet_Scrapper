@@ -13,6 +13,13 @@ const [country, setCountry] = useState('');
 const [city, setCity] = useState('');
 const [employeeRange, setEmployeeRange] = useState('');
 
+  // State for handling pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const totalPages = 10; // Adjust this based on your actual data
+
+  // State for handling selected detail
+const [selectedId, setSelectedId] = useState<string | null>(null);
+
 
 useEffect(() => {
   // Fetch data on component mount
@@ -66,6 +73,22 @@ const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
   }
 };
 
+
+  // Handle page change
+  const handlePageChange = (pageNumber: number) => {
+    setCurrentPage(pageNumber);
+    // Navigate to the new page based on pageNumber
+    router.push(`/dashboard?page=${pageNumber}`);
+  };
+
+
+// Handle navigation to detail page
+const handleGoToDetail = (id: string) => {
+  setSelectedId(id); // update state
+  router.push(`/details/${id}`); // navigate
+};
+  
+
   const handleExportExcel = () => {
     console.log("Export as Excel clicked");
     // Your Excel export logic goes here
@@ -114,7 +137,9 @@ const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
   return (
     <div className="flex min-h-screen rounded-lg bg-white border border-[#3F54D1]">
       {/* Sidebar */}
-      <aside className="w-64 bg-[#F2F2F2] rounded-2xl py-6 px-4 flex flex-col ml-4 mt-6 mb-8 mr-[-16]">
+      {/* <aside className="w-64 bg-[#F2F2F2] rounded-2xl py-6 px-4 flex flex-col ml-4 mt-6 mb-8 mr-[-16]"></aside> */}
+      <aside className="w-64 flex-shrink-0 bg-[#F2F2F2] rounded-2xl py-6 px-4 flex flex-col ml-4 mt-6 mb-8">
+
         {/* Logo */}
         <div className="flex items-center space-x-2 mb-4">
           <img src="/logo.png" alt="Logo" className="w-22 h-10" />
@@ -401,6 +426,35 @@ const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
               </div>
             )}
           </div>
+          {/* Pagination Controls */}
+<div className="flex items-center space-x-2 ml-190 mt-[-40]">
+<button className="w-8 h-8 bg-[#D9D9D9] border border-gray-300 rounded-md hover:bg-gray-200 flex items-center justify-center"
+onClick={() => handlePageChange(currentPage > 1 ? currentPage - 1 : 1)}
+>
+  <svg
+    className="w-full h-full"
+    fill="#8B8B8B"
+    viewBox="0 0 24 24"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path d="M15 18l-6-6 6-6v12z" />
+  </svg>
+</button>
+  <span className="text-sm text-[#8B8B8B]">1 2 3 4 5 ......... 10</span>
+  <button className="w-8 h-8 bg-[#D9D9D9] border border-gray-300 rounded-md hover:bg-gray-200 flex items-center justify-center"
+  onClick={() => handlePageChange(currentPage < totalPages ? currentPage + 1 : totalPages)}
+  >
+  <svg
+    className="w-full h-full"
+    fill="#8B8B8B"
+    viewBox="0 0 24 24"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path d="M10 6l6 6-6 6" />
+  </svg>
+</button>
+</div>
+   
         </section>
       </main>
 
@@ -597,6 +651,42 @@ const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         ))}
       </tbody>
     </table>
+   {/* Pagination Controls */}
+<div className="flex items-center space-x-2 ml-190 mt-[-40]">
+  {/* Previous Page */}
+  <button
+    className="w-8 h-8 bg-[#D9D9D9] border border-gray-300 rounded-md hover:bg-gray-200 flex items-center justify-center"
+    onClick={() => handlePageChange(currentPage > 1 ? currentPage - 1 : 1)}
+  >
+    <svg
+      className="w-full h-full"
+      fill="#8B8B8B"
+      viewBox="0 0 24 24"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path d="M15 18l-6-6 6-6v12z" />
+    </svg>
+  </button>
+
+  {/* Page Indicator */}
+  <span className="text-sm text-[#8B8B8B]">Page {currentPage} of {totalPages}</span>
+
+  {/* Next Page */}
+  <button
+    className="w-8 h-8 bg-[#D9D9D9] border border-gray-300 rounded-md hover:bg-gray-200 flex items-center justify-center"
+    onClick={() => handlePageChange(currentPage < totalPages ? currentPage + 1 : totalPages)}
+  >
+    <svg
+      className="w-full h-full"
+      fill="#8B8B8B"
+      viewBox="0 0 24 24"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path d="M10 6l6 6-6 6" />
+    </svg>
+  </button>
+</div>
+
   </div>
 </main>
 

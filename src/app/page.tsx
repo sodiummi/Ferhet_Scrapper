@@ -85,7 +85,7 @@ export default function LoginPage() {
 
         <form className="text-left space-y-5" onSubmit={handleSubmit}>
           <div>
-            <label className="text-sm font-medium text-[000000] block mb-1">
+            <label className="text-sm font-medium text-[#000000] block mb-1">
               Your Email Address
             </label>
             <input
@@ -102,7 +102,7 @@ export default function LoginPage() {
           </div>
 
           <div>
-            <label className="text-sm font-medium text-[000000] block mb-1">
+            <label className="text-sm font-medium text-[#000000] block mb-1">
               Password
             </label>
             <div className="relative">
@@ -121,7 +121,7 @@ export default function LoginPage() {
               <input type="checkbox" className="mr-2" />
               Remember me
             </label>
-            <a href="forgotpassword" className="text-[000000] hover:underline">
+            <a href="forgotpassword" className="text-[#000000] hover:underline">
               Forgot password?
             </a>
           </div>

@@ -1,0 +1,28 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:15-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: m1
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: ai_scraper
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+  app:
+    build: .
+    depends_on:
+      - db
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: postgresql://m1:admin@db:5432/ai_scraper
+
+    command: npm run start
+
+volumes:
+  postgres-data:

@@ -139,7 +139,7 @@ export default function Signup() {
         <form className="text-left space-y-5" onSubmit={handleSubmit}>
           <div className="flex flex-col sm:flex-row sm:space-x-4 space-y-4 sm:space-y-0">
             <div className="w-full sm:w-1/2">
-              <label className="text-sm font-medium text-[000000] block mb-1">
+              <label className="text-sm font-medium text-[#000000] block mb-1">
                 First Name
               </label>
               <input
@@ -152,7 +152,7 @@ export default function Signup() {
             </div>
 
             <div className="w-full sm:w-1/2">
-              <label className="text-sm font-medium text-[000000] block mb-1">
+              <label className="text-sm font-medium text-[#000000] block mb-1">
                 Last Name
               </label>
               <input
@@ -166,7 +166,7 @@ export default function Signup() {
           </div>
 
           <div>
-            <label className="text-sm font-medium text-[000000] block mb-1">
+            <label className="text-sm font-medium text-[#000000] block mb-1">
               Your Email Address
             </label>
             <input
@@ -183,7 +183,7 @@ export default function Signup() {
           </div>
 
           <div>
-            <label className="text-sm font-medium text-[000000] block mb-1">
+            <label className="text-sm font-medium text-[#000000] block mb-1">
               Password
             </label>
             <div className="relative">
@@ -198,7 +198,7 @@ export default function Signup() {
           </div>
 
           <div>
-            <label className="text-sm font-medium text-[000000] block mb-1">
+            <label className="text-sm font-medium text-[#000000] block mb-1">
               Confirm Password
             </label>
             <div className="relative">

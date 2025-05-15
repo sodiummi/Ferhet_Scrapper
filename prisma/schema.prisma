@@ -8,22 +8,44 @@ datasource db {
 }
 
 model companies {
-  id             Int       @id @default(autoincrement())
-  name           String?   @db.VarChar
-  legal_form     String?   @db.VarChar
-  industry       String?   @db.VarChar
-  address        Json?     @db.Json
-  phones         Json?     @db.Json
-  emails         Json?     @db.Json
-  website        String?   @db.VarChar
+  id             Int        @id @default(autoincrement())
+  name           String?    @db.VarChar
+  legal_form     String?    @db.VarChar
+  industry       String?    @db.VarChar
+  address        Json?      @db.Json
+  phones         Json?      @db.Json
+  emails         Json?      @db.Json
+  website        String?    @db.VarChar
   founding_year  Int?
-  size           String?   @db.VarChar
-  management     Json?     @db.Json
-  patents        Json?     @db.Json
-  certifications Json?     @db.Json
-  source_url     String?   @db.VarChar
-  created_at     DateTime? @db.Timestamp(6)
-  updated_at     DateTime? @db.Timestamp(6)
+  size           String?    @db.VarChar
+  revenue        String?    @db.VarChar     // Added field
+  country        String?    @db.VarChar     // Added field
+  management     Json?      @db.Json
+  patents        Json?      @db.Json
+  certifications Json?      @db.Json
+  source_url     String?    @db.VarChar
+  created_at     DateTime?  @db.Timestamp(6)
+  updated_at     DateTime?  @db.Timestamp(6)
+
+  employees      employees[]                // Relation
 
   @@index([name], map: "ix_companies_name")
+}
+
+model employees {
+  id         Int       @id @default(autoincrement())
+  full_name  String    @db.VarChar
+  role       String?   @db.VarChar
+  department String?   @db.VarChar
+  email      String?   @db.VarChar
+  phone      String?   @db.VarChar
+  linkedin   String?   @db.VarChar
+  xing       String?   @db.VarChar
+  experience Json?     @db.Json
+  education  Json?     @db.Json
+
+  company    companies @relation(fields: [company_id], references: [id])
+  company_id Int
+
+  @@index([company_id])
 }

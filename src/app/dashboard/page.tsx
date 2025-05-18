@@ -437,7 +437,7 @@ const handleGoToDetail = (id: string) => {
                   <option>Select country</option>
                   
   <option value="UK">UK</option>
-  <option value="USA">USA</option>
+  <option value="US">USA</option>
   <option value="Germany">Germany</option>
   <option value="Netherlands">Netherlands</option>
   <option value="India">India</option>

@@ -159,9 +159,9 @@ export default function Statistics() {
             <h2 className="text-[#3F54D1] text-2xl sm:text-3xl font-semibold mb-6">Statistics</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
               {[
-                ["Companies scraped", "12,540"],
-                ["Employees scraped", "28,340"],
-                ["Active searches", "5"],
+                ["Companies scraped", "2004"],
+                ["Employees scraped", "0"],
+                ["Active searches", "13"],
                 ["Successful searches", "1,890"],
               ].map(([label, value], idx) => (
                 <div
@@ -179,37 +179,31 @@ export default function Statistics() {
 
           <section className="bg-[#F2F2F2] p-6 rounded-lg mt-6 mb-[-10]">
             <div className="overflow-x-auto">
-              <table className="min-w-full text-sm text-left border-collapse">
-                <thead className="bg-[#E2E2E2] text-black">
-                  <tr>
-                    <th className="px-4 py-2 font-medium border-l border-gray-300 whitespace-nowrap">Search ID</th>
-                    <th className="px-4 py-2 font-medium border-gray-300 whitespace-nowrap">Status</th>
-                    <th className="px-4 py-2 font-medium border-gray-300 whitespace-nowrap">Companies scraped</th>
-                    <th className="px-4 py-2 font-medium border-gray-300 whitespace-nowrap">Employees scraped</th>
-                    <th className="px-4 py-2 font-medium border-gray-300 whitespace-nowrap">Date</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {[
-                    "Completed", "Completed", "In Progress", "Completed", "In Progress",
-                    "Completed", "In Progress", "Completed", "Completed", "Completed",
-                    "Completed", "Completed"
-                  ].map((status, idx) => (
-                    <tr key={idx} className="border-t border-b border-gray-300 text-[#565656]">
-                      <td className="px-4 py-2 border-l border-r border-gray-200 whitespace-nowrap">1012</td>
-                      <td className="px-4 py-2 border-r border-gray-200 whitespace-nowrap">
-                        <span className={`px-3 py-1 rounded-sm text-xs font-normal ${status === "Completed" ? "bg-[#3F54D1] text-white" : "bg-[#CFCFCF] text-black"}`}>
-                          {status}
-                        </span>
-                      </td>
-                      <td className="px-4 py-2 border-r border-gray-200 whitespace-nowrap">Technology</td>
-                      <td className="px-4 py-2 border-r border-gray-200 whitespace-nowrap">info@thestralis.com</td>
-                      <td className="px-4 py-2 border-r border-gray-200 whitespace-nowrap">Feb 23, 2024</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+    <table className="min-w-full text-sm text-left border-collapse">
+      <thead className="bg-[#E2E2E2] text-black">
+        <tr>
+          <th className="px-4 py-2 font-medium border-l border-gray-300 whitespace-nowrap">Search ID</th>
+          <th className="px-4 py-2 font-medium border-gray-300 whitespace-nowrap">Status</th>
+          <th className="px-4 py-2 font-medium border-gray-300 whitespace-nowrap">Companies scraped</th>
+          <th className="px-4 py-2 font-medium border-gray-300 whitespace-nowrap">Employees scraped</th>
+          <th className="px-4 py-2 font-medium border-gray-300 whitespace-nowrap">Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr className="border-t border-b border-gray-300 text-[#565656]">
+          <td className="px-4 py-2 border-l border-r border-gray-200 whitespace-nowrap">1012</td>
+          <td className="px-4 py-2 border-r border-gray-200 whitespace-nowrap">
+            <span className="px-3 py-1 rounded-sm text-xs font-normal bg-[#3F54D1] text-white">
+              Completed
+            </span>
+          </td>
+          <td className="px-4 py-2 border-r border-gray-200 whitespace-nowrap">Retail</td>
+          <td className="px-4 py-2 border-r border-gray-200 whitespace-nowrap">0</td>
+          <td className="px-4 py-2 border-r border-gray-200 whitespace-nowrap">May 18, 2025</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 
             {/* Pagination Controls */}
             <div className="flex justify-end items-center space-x-2 mt-6">

@@ -16,37 +16,44 @@ export default function LoginPage() {
   })
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
+  e.preventDefault()
 
-    // Reset errors
-    setErrors({
-      email: '',
-      password: ''
-    })
+  // Reset errors
+  setErrors({
+    email: '',
+    password: ''
+  })
 
-    // Validate fields
-    let isValid = true
-    let newErrors = { ...errors }
+  // Validate fields
+  let isValid = true
+  let newErrors = { ...errors }
 
-    if (!email) {
-      newErrors.email = 'Email is required.'
-      isValid = false
-    }
+  if (!email) {
+    newErrors.email = 'Email is required.'
+    isValid = false
+  }
 
-    if (!password) {
-      newErrors.password = 'Password is required.'
-      isValid = false
-    }
+  if (!password) {
+    newErrors.password = 'Password is required.'
+    isValid = false
+  }
 
-    setErrors(newErrors)
+  setErrors(newErrors)
 
-    // If form is valid, proceed with the login logic (e.g., API call)
-    if (isValid) {
-      console.log('Form Submitted:', { email, password })
-
+  // Hardcoded login logic
+  if (isValid) {
+    if (email === 'admin@gmail.com' && password === 'admin') {
+      console.log('Logged in as admin')
       router.push('/dashboard')
+    } else {
+      setErrors({
+        email: '',
+        password: 'Invalid email or password.'
+      })
     }
   }
+}
+
 
   // Handle input changes and clear error messages when user starts typing
   const [isEmailFocused, setIsEmailFocused] = useState(false)
@@ -121,9 +128,9 @@ export default function LoginPage() {
               <input type="checkbox" className="mr-2" />
               Remember me
             </label>
-            <a href="forgotpassword" className="text-[#000000] hover:underline">
+            {/* <a href="forgotpassword" className="text-[#000000] hover:underline">
               Forgot password?
-            </a>
+            </a> */}
           </div>
 
           <button
@@ -134,12 +141,12 @@ export default function LoginPage() {
           </button>
         </form>
 
-        <p className="text-sm text-[#808080] mt-6">
+        {/* <p className="text-sm text-[#808080] mt-6">
           Don’t have an account?{' '}
           <a href="signup" className="text-[#000000] font-medium hover:underline">
             Sign up
           </a>
-        </p>
+        </p> */}
       </div>
     </main>
   )

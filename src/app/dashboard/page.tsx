@@ -73,13 +73,13 @@ const handleSearch = () => {
         return;
       }
       
-      const filtered = data.filter((companies: { name?: string; website?: string; industry?: string; address?: { address?: string }; size?: string }) => {    // Step 2: Filter it
+      const filtered = data.filter((companies: { name?: string; website?: string; industry?: string; address?: { address?: string }; size?: string; country?: string; }) => {    // Step 2: Filter it
 
         // Individual filter checks
         const nameMatch = !companyName || companies.name?.toLowerCase().includes(companyName.toLowerCase());
         const websiteMatch = !website || companies.website?.toLowerCase().includes(website.toLowerCase());
         const industryMatch = !industry || companies.industry === industry;
-        const countryMatch = !country || companies.address?.address?.toLowerCase().includes(country.toLowerCase());
+        const countryMatch = !country || companies.country === country;
         const cityMatch = !city || companies.address?.address?.toLowerCase().includes(city.toLowerCase());
         const employeeMatch = !employeeRange || companies.size === employeeRange;
 
@@ -111,21 +111,19 @@ const [confirmPassword, setConfirmPassword] = useState('');
     return;
   }
 
-  const headers = ['Company Name', 'Location', 'Industry', 'Phone', 'Email', 'Website', 'CEO'];
+  const headers = ['Company Name', 'Location', 'Industry', 'Phone', 'Website'];
   
   const csvRows = [
     headers.join(','), // header row
     ...companies.map((company) => {
       const row = [
         company.name || '',
-        company.address?.address || '',
+        company.address || '',
         company.industry || '',
-        company.phones?.phone || '',
-        company.emails?.email || '',
+        company.phones || '',
         company.website || '',
-        company.management?.CEO || '',
       ];
-      return row.map(val => `"${val.replace(/"/g, '""')}"`).join(',');
+      return row.map(val => `"${String(val).replace(/"/g, '""')}"`).join(',');
     })
   ];
 
@@ -431,17 +429,19 @@ const handleGoToDetail = (id: string) => {
               <div className="relative">
                 <label className="block mb-1 text-sm font-medium text-[#000000]">Country</label>
                 <select
+                value={country}
+                onChange={(e) => setCountry(e.target.value)}
                   className="appearance-none border border-gray-300 rounded-md w-full text-gray-500 text-sm pl-3 pr-2 h-10.5 leading-10 bg-gray"
                   aria-label="Country selection"
                 >
                   <option>Select country</option>
                   
-  <option value="">UK</option>
-  <option value="">USA</option>
-  <option value="">Germany</option>
-  <option value="">Netherlands</option>
-  <option value="">India</option>
-  <option value="">Switzerland</option>
+  <option value="UK">UK</option>
+  <option value="USA">USA</option>
+  <option value="Germany">Germany</option>
+  <option value="Netherlands">Netherlands</option>
+  <option value="India">India</option>
+  <option value="Switzerland">Switzerland</option>
                 </select>
                 <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center" style={{ top: '40%' }}>
                   <svg
@@ -551,7 +551,7 @@ const handleGoToDetail = (id: string) => {
                   <th className="px-4 py-2 font-medium border-gray-300 whitespace-nowrap">Location</th>
                   <th className="px-4 py-2 font-medium border-gray-300 whitespace-nowrap">Industry</th>
                   <th className="px-4 py-2 font-medium border-gray-300 whitespace-nowrap">Phone</th>
-                  <th className="px-4 py-2 font-medium border-gray-300 whitespace-nowrap">Email</th>
+                  <th className="px-4 py-2 font-medium border-gray-300 whitespace-nowrap">Country</th>
                   <th className="px-4 py-2 font-medium border-gray-300 whitespace-nowrap">Website</th>
                   <th className="px-4 py-2 font-medium whitespace-nowrap">Key people</th>
                 </tr>
@@ -560,22 +560,26 @@ const handleGoToDetail = (id: string) => {
               {companies.map((company, idx) => (
   <tr key={idx} className="border-t border-b border-gray-300 text-[#565656]">
   <td 
-    className="px-4 py-2 border-l border-r border-gray-200 whitespace-nowrap cursor-pointer hover:text-[#3F54D1]" 
-    onClick={() => setIsDialogOpen(true)}
-  >
-    {company.name}
-  </td>
+  className="px-4 py-2 border-l border-r border-gray-200 whitespace-nowrap cursor-pointer hover:text-[#3F54D1]" 
+  onClick={() => {
+    setSelectedCompany(company);  // Set the selected company here
+    setIsDialogOpen(true);
+  }}
+>
+  {company.name}
+</td>
+
   <td className="px-4 py-2 border-r border-gray-200 whitespace-nowrap">
-    {company.address?.address || "-"}
+    {company.address || "-"}
   </td>
   <td className="px-4 py-2 border-r border-gray-200 whitespace-nowrap">
     {company.industry || "-"}
   </td>
   <td className="px-4 py-2 border-r border-gray-200 whitespace-nowrap">
-    {company.phones?.phone || "-"}
+    {company.phones || "-"}
   </td>
   <td className="px-4 py-2 border-r border-gray-200 whitespace-nowrap">
-    {company.emails?.email || "-"}
+    {company.country || "-"}
   </td>
   <td className="px-4 py-2 border-r border-gray-200 whitespace-nowrap">
     {company.website || "-"}
@@ -865,41 +869,99 @@ onClick={() => handlePageChange(currentPage > 1 ? currentPage - 1 : 1)}
 
       <div className="flex gap-8">
         {/* Sidebar */}
-        <aside className="w-[30%] bg-[#F2F2F2] rounded-2xl py-6 px-4 flex flex-col mt-7 ml-5">
-          <h2 className="text-[#3F54D1] text-2xl font-semibold mb-6">Company Overview</h2>
-          <p className="text-[#808080]">
-            Explore agricultural, construction, forestry machinery, technology, services and more on 
-            the official John Deere website. Find a dealer in your area or purchase online. It doesn't 
-            matter if you've never driven a tractor, mowed a lawn, or operated a dozer. With John Deere's 
-            role in helping produce food, fiber, fuel, and more, you’re in good hands..
-            &nbsp;&nbsp;&nbsp;<u>Show more</u>
-          </p>
+        {selectedCompany && (
+  <aside className="w-[30%] bg-[#F2F2F2] rounded-2xl py-6 px-4 flex flex-col mt-7 ml-5">
+    <h2 className="text-[#3F54D1] text-2xl font-semibold mb-6">Company Overview</h2>
+    <p className="text-[#808080] text-sm leading-relaxed">
+  <span className="text-[#000000] font-medium">
+    {selectedCompany.name || "This company"}
+  </span>{" "}
+  is a{" "}
+  <span className="text-[#000000] font-medium">
+    {selectedCompany.industry || "company"}
+  </span>{" "}
+  located at{" "}
+  <span className="text-[#000000] font-medium">
+    {selectedCompany.address || "an unknown location"}
+  </span>
+  . It can be contacted using{" "}
+  <span className="text-[#000000] font-medium">
+    {selectedCompany.phones || "N/A"}
+  </span>
+  , and the source data is{" "}
+  <a
+    href={
+      selectedCompany.website?.startsWith("http")
+        ? selectedCompany.website
+        : `https://${selectedCompany.website}`
+    }
+    target="_blank"
+    rel="noopener noreferrer"
+    className="text-[#3F54D1] underline font-medium"
+  >
+    {selectedCompany.website || "unavailable"}
+  </a>
+  .
+  &nbsp;&nbsp;&nbsp;<u></u>
+</p>
 
-          {/* Company Details */}
-          <div className="grid grid-cols-2 gap-4 mt-14">
-            <div className="text-[#636363]">
-              <p className="mb-6">Phone</p>
-              <p className="mb-6">Market Cap</p>
-              <p className="mb-6">Annual Revenue</p>
-              <p className="mb-6">Industry</p>
-              <p className="mb-6">Founding Year</p>
-              <p className="mb-6">Industry</p>
-            </div>
-            <div className="text-[#000000]">
-              <p className="mb-6">(309)-765-8000</p>
-              <p className="mb-6">$134M</p>
-              <p className="mb-6">$23M</p>
-              <p className="mb-6">2003</p>
-              <p className="mb-6">Agriculture</p>
-              <p className="mb-3 w-25 px-3 py-1 rounded-sm text-xs font-medium bg-[#CFCFCF] text-[#000000]">
-                construction
-              </p>
-              <p className="mb-6 w-25 px-3 py-1 rounded-sm text-xs font-medium bg-[#CFCFCF] text-[#000000]">
-                machinery
-              </p>
-            </div>
-          </div>
-        </aside>
+
+    {/* Company Details */}
+   <div className="mt-6 grid gap-y-4">
+  {/* Name */}
+  <div className="grid grid-cols-2">
+    <p className="text-[#636363]">Name</p>
+    <p className="text-[#000000]">{selectedCompany.name || "-"}</p>
+  </div>
+
+  {/* Phone */}
+  <div className="grid grid-cols-2">
+    <p className="text-[#636363]">Phone</p>
+    <p className="text-[#000000]">{selectedCompany.phones || "-"}</p>
+  </div>
+
+  {/* Location */}
+  <div className="grid grid-cols-2">
+    <p className="text-[#636363]">Location</p>
+    <p className="text-[#000000]">{selectedCompany.address || "-"}</p>
+  </div>
+
+  {/* Website */}
+  <div className="grid grid-cols-2">
+    <p className="text-[#636363]">Website</p>
+    <p className="text-[#3F54D1] underline break-all">
+      {selectedCompany.website ? (
+        <a
+          href={
+            selectedCompany.website.startsWith("http")
+              ? selectedCompany.website
+              : `https://${selectedCompany.website}`
+          }
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {selectedCompany.website}
+        </a>
+      ) : (
+        "-"
+      )}
+    </p>
+  </div>
+
+  {/* Industry */}
+  <div className="grid grid-cols-2">
+    <p className="text-[#636363]">Industry</p>
+    <div>
+      <span className="inline-block px-3 py-1 rounded-sm text-xs font-medium bg-[#CFCFCF] text-[#000000]">
+        {selectedCompany.industry || "-"}
+      </span>
+    </div>
+  </div>
+</div>
+
+
+  </aside>
+)}
 
         {/* Main Content */}
 <main className="flex-1 p-4 bg-[#F2F2F2] rounded-2xl mt-7 ml-5 mr-5 max-h-[520px] overflow-y-auto">

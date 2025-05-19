@@ -401,15 +401,12 @@ const handleGoToDetail = (id: string) => {
   <option value="retail">Retail</option>
   <option value="financial services">Financial Services</option>
   <option value="consumer services">Consumer Services</option>
-  <option value="hospital & health Care">Hospital & Health Care</option>
+  <option value="hospital & health care">Hospital & Health Care</option>
   <option value="automotive">Automotive</option>
   <option value="restaurants">Restaurants</option>
   <option value="education management">Education Management</option>
   <option value="food & beverages">Food & Beverages</option>
   <option value="design">Design</option>
-  <option value="hospitality">Hospitality</option>
-  <option value="accounting">Accounting</option>
-  <option value="events services">Events Services</option>
 </select>
 
 
